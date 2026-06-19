@@ -136,47 +136,6 @@ export default function SidebarNav({ onNavigate }: Props) {
           );
         })}
       </nav>
-
-      <div className="flex-1 min-h-0 flex flex-col">
-        <p className="sidebar-section-label flex items-center justify-between">
-          <span>Ready to use</span>
-          {readyFiles.length > 0 && (
-            <span className="text-[var(--accent)] font-semibold normal-case tracking-normal">
-              {readyFiles.length}
-            </span>
-          )}
-        </p>
-
-        <div className="flex-1 overflow-y-auto space-y-2 pr-1 -mr-1 min-h-0 max-h-48 lg:max-h-none">
-          {isLoading ? (
-            <div className="flex items-center gap-2 px-3 py-4 text-xs text-[var(--text-faint)]">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Loading files…
-            </div>
-          ) : readyFiles.length === 0 ? (
-            <div className="rounded-xl px-3 py-4 bg-[var(--bg-muted)] border border-[var(--border-default)]">
-              <FileText className="w-5 h-5 text-[var(--text-faint)] mb-2" />
-              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                {processingCount > 0
-                  ? `${processingCount} file${processingCount > 1 ? 's' : ''} still processing. Check back soon!`
-                  : 'Add a file on Home to start asking questions.'}
-              </p>
-              <Link
-                to="/dashboard"
-                onClick={onNavigate}
-                className="inline-flex items-center gap-1 text-xs text-[var(--accent)] font-medium mt-2 hover:underline"
-              >
-                Go to Home
-                <ChevronRight className="w-3 h-3" />
-              </Link>
-            </div>
-          ) : (
-            readyFiles.slice(0, 8).map((doc) => (
-              <FileQuickLinks key={doc.id} doc={doc} onNavigate={onNavigate} />
-            ))
-          )}
-        </div>
-      </div>
     </div>
   );
 }
