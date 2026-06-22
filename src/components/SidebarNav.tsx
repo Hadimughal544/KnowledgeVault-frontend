@@ -1,9 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import {
-  Home, Search, MessageSquare, Sparkles, FileText, ChevronRight, Loader2,
+  Home, Search, MessageSquare, Sparkles, ChevronRight,
 } from 'lucide-react';
-import { documentApi, type Document } from '../lib/api';
 
 interface Props {
   onNavigate?: () => void;
@@ -37,56 +35,8 @@ function isActive(path: string, locationPath: string, match?: string) {
   return false;
 }
 
-function FileQuickLinks({ doc, onNavigate }: { doc: Document; onNavigate?: () => void }) {
-  const location = useLocation();
-  const chatActive = location.pathname === `/documents/${doc.id}/chat`;
-  const actionsActive = location.pathname === `/documents/${doc.id}/generate`;
-
-  return (
-    <div className="sidebar-file-item">
-      <div className="flex items-center gap-2 min-w-0 mb-2">
-        <span className="text-base shrink-0" aria-hidden>📄</span>
-        <span className="text-sm font-medium text-[var(--text-primary)] truncate" title={doc.name}>
-          {doc.name}
-        </span>
-      </div>
-      <div className="flex gap-1.5">
-        <Link
-          to={`/documents/${doc.id}/chat`}
-          onClick={onNavigate}
-          className={`sidebar-file-action ${chatActive ? 'sidebar-file-action-active' : ''}`}
-          title={`Ask questions about ${doc.name}`}
-        >
-          <MessageSquare className="w-3.5 h-3.5" />
-          <span>Ask</span>
-        </Link>
-        <Link
-          to={`/documents/${doc.id}/generate`}
-          onClick={onNavigate}
-          className={`sidebar-file-action ${actionsActive ? 'sidebar-file-action-active' : ''}`}
-          title={`Smart actions for ${doc.name}`}
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Actions</span>
-        </Link>
-      </div>
-    </div>
-  );
-}
-
 export default function SidebarNav({ onNavigate }: Props) {
   const location = useLocation();
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['documents'],
-    queryFn: () => documentApi.list().then((r) => r.data),
-    refetchInterval: 8000,
-  });
-
-  const readyFiles = (data?.documents || []).filter((d) => d.status === 'COMPLETED');
-  const processingCount = (data?.documents || []).filter(
-    (d) => d.status === 'PENDING' || d.status === 'PROCESSING'
-  ).length;
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
